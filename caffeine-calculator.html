@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nayeli's Caffeine Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <img src="Accent-image-horizontal.png" alt="" class="accent-horizontal">
+
+    <div class="container">
+        <div class="sidebar">
+            <img src="Accent-image.png" alt="" class="sidebar-image">
+        </div>
+
+        <div class="main-content">
+            <div class="header">
+                <h1>
+                    <span class="name">Nayeli's</span>
+                    Caffeine Calculator
+                </h1>
+            </div>
+
+            <div class="content-grid">
+                <div class="left-section">
+                    <h2>Select Brew Method</h2>
+                    
+                    <div class="brew-methods">
+                        <div class="brew-method" data-method="pourover" data-extraction="0.70">
+                            <img src="method-picture-pourover.png" alt="Pour Over">
+                            <span>Pourover</span>
+                        </div>
+                        <div class="brew-method" data-method="mokapot" data-extraction="0.75">
+                            <img src="method-picture-mokapot.png" alt="Moka Pot">
+                            <span>Moka Pot</span>
+                        </div>
+                        <div class="brew-method" data-method="drip" data-extraction="0.65">
+                            <img src="method-picture-drip.png" alt="Drip Coffee">
+                            <span>Drip Coffee</span>
+                        </div>
+                        <div class="brew-method" data-method="espresso" data-extraction="0.75">
+                            <img src="method-picture-espresso.png" alt="Espresso">
+                            <span>Espresso</span>
+                        </div>
+
+                        <div class="more-options-toggle" id="moreOptionsToggle">
+                            More Options
+                        </div>
+
+                        <div class="additional-methods" id="additionalMethods">
+                            <div class="brew-method" data-method="frenchpress" data-extraction="0.75">
+                                <img src="method-picture-french-press.png" alt="French Press">
+                                <span>French Press</span>
+                            </div>
+                            <div class="brew-method" data-method="chai" data-tea="50">
+                                <img src="method-picture-Chai-Tea.png" alt="Chai Tea">
+                                <span>Chai Tea</span>
+                            </div>
+                            <div class="brew-method" data-method="earlgrey" data-tea="40">
+                                <img src="method-picture-Earl-Gray.png" alt="Earl Grey">
+                                <span>Earl Grey Tea</span>
+                            </div>
+                            <div class="brew-method" data-method="greentea" data-tea="28">
+                                <img src="method-picture-Green-tea.png" alt="Green Tea">
+                                <span>Green Tea</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coffee Inputs -->
+                    <div id="coffeeInputs">
+                        <div class="input-group">
+                            <label>Grams of Beans</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="beansInput" placeholder="Input bean qty" min="0" step="0.1">
+                                <span class="unit-label">g</span>
+                            </div>
+                        </div>
+
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label>Total Water for Brewing</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="totalWaterInput" placeholder="Input water qty" min="0" step="1">
+                                    <div class="unit-toggle">
+                                        <button class="unit-btn selected" data-unit="ml" data-field="totalWater">ml</button>
+                                        <button class="unit-btn" data-unit="oz" data-field="totalWater">oz</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label>Amount I'll Drink</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="drinkInput" placeholder="Input qty" min="0" step="1">
+                                    <div class="unit-toggle">
+                                        <button class="unit-btn selected" data-unit="ml" data-field="drink">ml</button>
+                                        <button class="unit-btn" data-unit="oz" data-field="drink">oz</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Espresso Inputs -->
+                    <div class="espresso-options" id="espressoInputs">
+                        <button class="espresso-btn" data-espresso="single">Single Shot</button>
+                        <button class="espresso-btn" data-espresso="double">Double Shot</button>
+                    </div>
+
+                    <!-- Tea Inputs -->
+                    <div class="tea-water-input" id="teaInputs">
+                        <div class="input-group">
+                            <label>Amount of Tea</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="teaWaterInput" placeholder="Input qty" min="0" step="1">
+                                <div class="unit-toggle">
+                                    <button class="unit-btn selected" data-unit="ml" data-field="tea">ml</button>
+                                    <button class="unit-btn" data-unit="oz" data-field="tea">oz</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="calculate-btn" id="calculateBtn" disabled>
+                        <img src="calc-icon.svg" alt="">
+                        Calculate Caffeine Amount
+                    </button>
+                </div>
+
+                <div class="right-section">
+                    <h2>Caffeine Level</h2>
+                    
+                    <div class="results-section">
+                        <div class="empty-state" id="emptyState">
+                            <img src="ResultSection-Drawing.png" alt="Coffee cup">
+                            <p>Click calculate to<br>see results</p>
+                        </div>
+
+                        <div class="result-content" id="resultContent">
+                            <p class="result-label">Your caffeine intake today:</p>
+                            <div class="caffeine-amount" id="caffeineAmount">0mg</div>
+                            <img src="ResultSection-Drawing.png" alt="Coffee cup" class="result-icon">
+                            <p class="warning-text" id="warningText">You are over your target 140mg</p>
+                            
+                            <div class="view-calculation">
+                                <button class="accordion-toggle" id="accordionToggle">
+                                    View Calculation
+                                </button>
+                                <div class="calculation-details" id="calculationDetails">
+                                    <h4>Formula</h4>
+                                    <p id="formulaText"></p>
+                                    <h4>Your Inputs</h4>
+                                    <p id="inputsText"></p>
+                                </div>
+                            </div>
+
+                            <button class="clear-btn" id="clearBtn">Clear Calculation</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
