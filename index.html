@@ -73,15 +73,7 @@
 
                     <!-- Coffee Inputs -->
                     <div id="coffeeInputs">
-                        <div class="input-group">
-                            <label>Grams of Beans</label>
-                            <div class="input-wrapper">
-                                <input type="number" id="beansInput" placeholder="Input bean qty" min="0" step="0.1">
-                                <span class="unit-label">g</span>
-                            </div>
-                        </div>
-
-                        <div class="input-row">
+                       
                             <div class="input-group">
                                 <label>Total Water for Brewing</label>
                                 <div class="input-wrapper">
@@ -89,18 +81,36 @@
                                     <div class="unit-toggle">
                                         <button class="unit-btn selected" data-unit="ml" data-field="totalWater">ml</button>
                                         <button class="unit-btn" data-unit="oz" data-field="totalWater">oz</button>
+                                        <button class="unit-btn" data-unit="cups" data-field="totalWater">cups</button>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="input-group">
-                                <label>Amount I'll Drink</label>
+                        
+                        <div class="input-row">   
+                           <div class="input-group">
+                                <label>Coffee to Water Ratio - 1:__</label>
                                 <div class="input-wrapper">
-                                    <input type="number" id="drinkInput" placeholder="Input qty" min="0" step="1">
-                                    <div class="unit-toggle">
-                                        <button class="unit-btn selected" data-unit="ml" data-field="drink">ml</button>
-                                        <button class="unit-btn" data-unit="oz" data-field="drink">oz</button>
-                                    </div>
+                                    <input type="number" id="ratioInput" placeholder="Input ratio" min="0" step="0.1">
+                                </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Grams of Beans</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="beansInput" placeholder="Input bean qty" min="0" step="0.1">
+                                <span class="unit-label">g</span>
+                            </div>
+                        </div> 
+                        </div>
+                        
+
+                        <div class="input-group">
+                            <label>Amount I'll Drink</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="drinkInput" placeholder="Input qty" min="0" step="1">
+                                <div class="unit-toggle">
+                                    <button class="unit-btn" data-unit="ml" data-field="drink">ml</button>
+                                    <button class="unit-btn selected" data-unit="oz" data-field="drink">oz</button>
                                 </div>
                             </div>
                         </div>

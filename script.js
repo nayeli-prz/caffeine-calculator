@@ -3,7 +3,7 @@ let selectedMethod = null;
 let selectedExtraction = 0;
 let selectedTeaCaffeine = 0;
 let totalWaterUnit = 'ml';
-let drinkUnit = 'ml';
+let drinkUnit = 'oz';
 let teaUnit = 'ml';
 let espressoShot = null;
 
@@ -87,7 +87,40 @@ unitBtns.forEach(btn => {
         btn.classList.add('selected');
 
         // Update state
-        if (field === 'totalWater') totalWaterUnit = unit;
+        if (field === 'totalWater') {
+            const currentValue = parseFloat(totalWaterInput.value);
+
+            // Convert the value if there's input
+            if (currentValue && !isNaN(currentValue)) {
+                // Convert current value to ml first
+                let valueInMl = currentValue;
+                if (totalWaterUnit === 'oz') {
+                    valueInMl = currentValue * 29.5735;
+                } else if (totalWaterUnit === 'cups') {
+                    valueInMl = currentValue * 236.588;
+                }
+
+                // Convert from ml to the new unit
+                let newValue = valueInMl;
+                if (unit === 'oz') {
+                    newValue = valueInMl / 29.5735;
+                } else if (unit === 'cups') {
+                    newValue = valueInMl / 236.588;
+                }
+
+                // Update the input with converted value
+                totalWaterInput.value = newValue.toFixed(1);
+            }
+
+            totalWaterUnit = unit;
+
+            // Recalculate ratio/beans when water unit changes
+            if (ratioInput.value) {
+                calculateFromRatio();
+            } else if (beansInput.value) {
+                updateRatioFromBeans();
+            }
+        }
         if (field === 'drink') drinkUnit = unit;
         if (field === 'tea') teaUnit = unit;
     });
@@ -98,10 +131,69 @@ const beansInput = document.getElementById('beansInput');
 const totalWaterInput = document.getElementById('totalWaterInput');
 const drinkInput = document.getElementById('drinkInput');
 const teaWaterInput = document.getElementById('teaWaterInput');
+const ratioInput = document.getElementById('ratioInput');
 
 [beansInput, totalWaterInput, drinkInput, teaWaterInput].forEach(input => {
     input.addEventListener('input', validateInputs);
 });
+
+// Ratio calculation logic
+let isUpdatingFromRatio = false;
+
+totalWaterInput.addEventListener('input', () => {
+    if (!isUpdatingFromRatio) {
+        calculateFromRatio();
+    }
+});
+
+ratioInput.addEventListener('input', () => {
+    calculateFromRatio();
+});
+
+beansInput.addEventListener('input', () => {
+    if (!isUpdatingFromRatio) {
+        updateRatioFromBeans();
+    }
+});
+
+function calculateFromRatio() {
+    const water = parseFloat(totalWaterInput.value);
+    const ratio = parseFloat(ratioInput.value);
+
+    if (water && ratio && ratio > 0) {
+        isUpdatingFromRatio = true;
+        // Calculate beans: water (ml) / ratio = beans (g)
+        let waterInMl = water;
+        if (totalWaterUnit === 'oz') {
+            waterInMl = water * 29.5735;
+        } else if (totalWaterUnit === 'cups') {
+            waterInMl = water * 236.588;
+        }
+        const calculatedBeans = waterInMl / ratio;
+        beansInput.value = calculatedBeans.toFixed(1);
+        isUpdatingFromRatio = false;
+        validateInputs();
+    }
+}
+
+function updateRatioFromBeans() {
+    const water = parseFloat(totalWaterInput.value);
+    const beans = parseFloat(beansInput.value);
+
+    if (water && beans && beans > 0) {
+        isUpdatingFromRatio = true;
+        // Calculate ratio: water (ml) / beans (g) = ratio
+        let waterInMl = water;
+        if (totalWaterUnit === 'oz') {
+            waterInMl = water * 29.5735;
+        } else if (totalWaterUnit === 'cups') {
+            waterInMl = water * 236.588;
+        }
+        const calculatedRatio = waterInMl / beans;
+        ratioInput.value = calculatedRatio.toFixed(1);
+        isUpdatingFromRatio = false;
+    }
+}
 
 function validateInputs() {
     let isValid = false;
@@ -145,9 +237,12 @@ calculateBtn.addEventListener('click', () => {
         inputs = `${teaWaterInput.value}${teaUnit} × ${caffeinePerOz.toFixed(1)}mg/oz = ${Math.round(caffeine)}mg`;
     } else {
         const beans = parseFloat(beansInput.value);
-        const totalWaterMl = totalWaterUnit === 'oz'
-            ? parseFloat(totalWaterInput.value) * 29.5735
-            : parseFloat(totalWaterInput.value);
+        let totalWaterMl = parseFloat(totalWaterInput.value);
+        if (totalWaterUnit === 'oz') {
+            totalWaterMl = totalWaterMl * 29.5735;
+        } else if (totalWaterUnit === 'cups') {
+            totalWaterMl = totalWaterMl * 236.588;
+        }
         const drinkMl = drinkUnit === 'oz'
             ? parseFloat(drinkInput.value) * 29.5735
             : parseFloat(drinkInput.value);
@@ -207,6 +302,7 @@ clearBtn.addEventListener('click', () => {
     totalWaterInput.value = '';
     drinkInput.value = '';
     teaWaterInput.value = '';
+    ratioInput.value = '';
 
     // Reset selections
     brewMethods.forEach(m => m.classList.remove('selected'));
